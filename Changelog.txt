@@ -1,3 +1,6 @@
+1.1.4
+	Thanks to @malnvenshort (github user), the performance issue in the Astronaut Complex has been solved.
+
 1.1.3
 	More adjustments for the performance issue when in the Astronaut Complex
 	Checks added when entering the Flight scene and entering the Space Centre for any cre which has a state = 9001, resets it to Available (9001 is vacation)

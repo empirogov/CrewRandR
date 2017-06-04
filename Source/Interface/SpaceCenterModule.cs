@@ -21,14 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-using System;
+ 
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using UnityEngine;
-using KSPPluginFramework;
 using KSP.UI;
 using KSP.UI.Screens;
 using FingerboxLib;
@@ -39,8 +36,11 @@ namespace CrewRandR.Interface
     class SpaceCenterModule : SceneModule
     {
         private bool astronautComplexSpawned;
+        private bool updateLabelOnce;
+        private int updateCnt;
+        private static int UPDATE_CNT = 5;
 
-        private void Start()
+        private new void Start()
         {
             Logging.Info("SpaceCenterModule.Start");
             CrewRandRRoster.RestoreVacationingCrew();
@@ -54,46 +54,50 @@ namespace CrewRandR.Interface
             GameEvents.onGUIAstronautComplexDespawn.Add(onGUIAstronautComplexDespawn);
             GameEvents.onGUILaunchScreenSpawn.Add(onGUILaunchScreenSpawn);
             GameEvents.onGUILaunchScreenDespawn.Add(onGUILaunchScreenDespawn);
-            lastUpdated = MAX_UPDATE_THRESHOLD + Time.realtimeSinceStartup + 1;
-            updateThreshold = 0;
+            GameEvents.OnCrewmemberHired.Add(onCrewmemberHired);
+
+            updateLabelOnce = true;
+            updateCnt = UPDATE_CNT;
         }
 
-        // No need to update more than once every few seconds here
-        private float lastUpdated = 0f;
-        private float updateThreshold = 0f;
-        private const float MAX_UPDATE_THRESHOLD = 5f; // UI update period in seconds
+        // Doing the update a single time fails since when this is called, it hasn't yet finalized
+        // So we do it UPDATE_CNT times and then stop
 
         protected override void LateUpdate()
         {
-            if (astronautComplexSpawned)
+            if (astronautComplexSpawned && updateLabelOnce)
             {
-                if (lastUpdated + updateThreshold <= Time.realtimeSinceStartup)
-                {
-                    // This is so that it will update quickly when first entering, but then will be delayed to reduce lag
-                    if (updateThreshold < MAX_UPDATE_THRESHOLD)
-                        updateThreshold += 0.1f;
+                if (updateCnt-- <= 0)
+                    updateLabelOnce = false;
 
-                    Logging.Debug("AC is spawned...");
-                    lastUpdated = Time.realtimeSinceStartup;
-                    AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
-                    if (ac)
+                Logging.Debug("AC is spawned...");
+                AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
+                if (ac)
+                {
+                    foreach (var s in ac.ScrollListAvailable)
                     {
-                        foreach (var s in ac.ScrollListAvailable)
+                        Logging.Info("");
+                        IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
+                        foreach (CrewListItem crewContainer in crewItemContainers)
                         {
-                            Logging.Info("");
-                            IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
-                            foreach (CrewListItem crewContainer in crewItemContainers)
+                            if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
                             {
-                                if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
-                                {
-                                    Logging.Debug("relabeling: " + crewContainer.GetName());
-                                    string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
-                                    crewContainer.SetLabel(label);
-                                }
+                                Logging.Debug("relabeling: " + crewContainer.GetName());
+                                string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
+                                crewContainer.SetLabel(label);
                             }
                         }
                     }
                 }
+            }
+        }
+
+        private void onCrewmemberHired(ProtoCrewMember member, int crewCount)
+        {
+            if (astronautComplexSpawned)
+            {
+                updateLabelOnce = true;
+                updateCnt = UPDATE_CNT;
             }
         }
 
@@ -105,6 +109,8 @@ namespace CrewRandR.Interface
         private void onGUIAstronautComplexSpawn()
         {
             astronautComplexSpawned = true;
+            updateLabelOnce = true;
+            updateCnt = UPDATE_CNT;
         }
 
         private void onGUILaunchScreenSpawn(GameEvents.VesselSpawnInfo info)
