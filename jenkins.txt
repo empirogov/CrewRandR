@@ -27,7 +27,7 @@
 1:CrewRandR, CrewRandR.version
 
 # 2:PROJNAME, PROJFILE, VERSIONFILE, PLUGINSFOLDER
-2:CrewRandR,CrewRandR/CrewRandR.csproj,CrewRandR.version,GameData/CrewRandR/Plugins
+2:CrewRandR,Source/CrewRandR.csproj,CrewRandR.version,GameData/CrewRandR/Plugins
 
 # 3:SOURCEFILE, DESTDIR
 3:CrewRandR.version,GameData/CrewRandR
