@@ -1,11 +1,20 @@
 
+@echo off
+
+rem H is the destination game folder
+rem GAMEDIR is the name of the mod folder (usually the mod name)
+rem GAMEDATA is the name of the local GameData
+rem VERSIONFILE is the name of the version file, usually the same as GAMEDATA,
+rem    but not always
+
 set H=R:\KSP_1.3.1_dev
-echo %H%
+set GAMEDIR=CrewRandR
+set GAMEDATA="GameData\"
+set VERSIONFILE=%GAMEDIR%.version
 
-copy /Y "Source\bin\Debug\CrewRandR.dll" "GameData\CrewRandR\Plugins"
-copy /Y CrewRandR.version GameData\CrewRandR
+copy /Y "%1%2" "%GAMEDATA%\%GAMEDIR%\Plugins"
+copy /Y %VERSIONFILE% %GAMEDATA%\%GAMEDIR%
 
-cd GameData
-mkdir "%H%\GameData\CrewRandR"
-xcopy /y /s CrewRandR "%H%\GameData\CrewRandR"
+xcopy /y /s /I %GAMEDATA%\%GAMEDIR% "%H%\GameData\%GAMEDIR%"
 
+pause

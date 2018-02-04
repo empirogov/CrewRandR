@@ -1,4 +1,5 @@
-﻿/*
+﻿#if false
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2015 Alexander Taylor
@@ -90,3 +91,5 @@ namespace CrewRandR.Interface
 #endif
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
-﻿/*
+﻿#if false
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2015 Alexander Taylor
@@ -156,3 +157,5 @@ namespace FingerboxLib.Interface
         virtual protected void OnDisable() { }
     }
 }
+
+#endif

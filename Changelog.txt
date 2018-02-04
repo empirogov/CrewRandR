@@ -1,9 +1,16 @@
+1.1.6
+	Removed unnecessary button from the toolbar
+
+1.1.5
+	Rebuild for KSP 1.3.1
+
 1.1.4
 	Thanks to @malnvenshort (github user), the performance issue in the Astronaut Complex has been solved.
 
 1.1.3
 	More adjustments for the performance issue when in the Astronaut Complex
-	Checks added when entering the Flight scene and entering the Space Centre for any cre which has a state = 9001, resets it to Available (9001 is vacation)
+	Checks added when entering the Flight scene and entering the Space Centre for any crew which has a state = 9001, resets it to Available (9001 is vacation)
+
 1.1.2
 	Fixed performance issue when entering the Astronaut Complex
 
@@ -14,19 +21,27 @@
 	Replaced OnLevelWasLoaded with delegate code due to it's being depreciated
 		Updated for 1.3
 
-1.1.0
-        Adoption by Linuxgurugamer
-        Updated for 1.2.*
-		Fixed bug where endless loop ocured when no available primary for the pod
+1.1.0.3
+	Removed some more log spam
+
+1.1.0.2
+		Renamed mod to Crew R&R, renamed everything to match, including directory
+
 1.1.0.1
 		Fixed syntax error in MM cfg file
 		Fixed endless loop when no good crew are available
 		Cleaned up some log spam
-1.1.0.2
-		Renamed mod to Crew R&R, renamed everything to match, including directory
 
-1.1.0.3
-		Removed some more log spam
+1.1.0
+        Adoption by Linuxgurugamer
+        Updated for 1.2.*
+		Fixed bug where endless loop occured when no available primary for the pod
+
+
+
+
+
+
 
 
 		
