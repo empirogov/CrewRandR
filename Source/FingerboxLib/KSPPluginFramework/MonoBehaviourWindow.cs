@@ -29,6 +29,7 @@
 
 using System;
 using UnityEngine;
+using ClickThroughFix;
 
 namespace KSPPluginFramework
 {
@@ -179,7 +180,7 @@ namespace KSPPluginFramework
                 WindowRect = WindowRect.ClampToScreen(ClampToScreenOffset);
 
             //Are we using a custom style of the skin style for the window                        
-            WindowRect = GUI.Window(WindowID, WindowRect, DrawWindowInternal, WindowCaption);
+            WindowRect = ClickThruBlocker.GUIWindow(WindowID, WindowRect, DrawWindowInternal, WindowCaption);
 
             //Draw the tooltip of its there to be drawn
             if (TooltipsEnabled)

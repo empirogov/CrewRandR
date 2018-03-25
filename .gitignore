@@ -239,3 +239,4 @@ $RECYCLE.BIN/
 *.zip
 *.dll
 *.pdb
+.vs

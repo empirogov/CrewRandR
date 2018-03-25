@@ -1,3 +1,8 @@
+1.1.7
+	Added support for ClickThroughBlocker
+	Updated to 1.4.1
+	Deleted unused code files
+
 1.1.6
 	Removed unnecessary button from the toolbar
 
