@@ -275,7 +275,6 @@ namespace CrewRandR
             Logging.Debug("RosterExtensions.SetLastMissionData");
             CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration = newMissionDuration;
             CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime = currentTime;
-            GamePersistence.SaveGame("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
         }
 
         public static double GetLastMissionDuration(this ProtoCrewMember kerbal)
