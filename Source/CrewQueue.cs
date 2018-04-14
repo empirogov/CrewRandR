@@ -60,12 +60,12 @@ namespace CrewRandR
         {
             DontDestroyOnLoad(this);
             _Instance = this;
-            GameEvents.OnVesselRecoveryRequested.Add(OnVesselRecoveryRequested);
+            GameEvents.onVesselRecovered.Add(OnVesselRecovered);
             // GameEvents.onLevelWasLoaded.Add(OnLevelWasLoaded);
         }
 
         // KSP Events
-        void OnVesselRecoveryRequested(Vessel vessel)
+        void OnVesselRecovered(ProtoVessel vessel, bool quick)
         {
             foreach (ProtoCrewMember kerbal in vessel.GetVesselCrew())
             {
