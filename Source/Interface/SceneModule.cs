@@ -52,17 +52,22 @@ namespace CrewRandR.Interface
 
                 if (partCrewManifests != null && partCrewManifests.Count > 0)
                 {
-                    PartCrewManifest partManifest = partCrewManifests[0];
-                    foreach (ProtoCrewMember crewMember in partManifest.GetPartCrew())
+                    // Remove all crew from the vessel (all parts).
+                    foreach (PartCrewManifest partManifest in partCrewManifests)
                     {
-                        if (crewMember != null)
+                        foreach (ProtoCrewMember crewMember in partManifest.GetPartCrew())
                         {
-                            // Clean the root part
-                            partManifest.RemoveCrewFromSeat(partManifest.GetCrewSeat(crewMember));
+                            if (crewMember != null)
+                            {
+                                partManifest.RemoveCrewFromSeat(partManifest.GetCrewSeat(crewMember));
+                            }
                         }
                     }
+
+                    // Assign fresh crew to the root part.
                     if (CrewRandRSettings.Instance != null && CrewRandRSettings.Instance.AssignCrews)
                     {
+                        PartCrewManifest partManifest = partCrewManifests[0];
                         partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, new List<ProtoCrewMember>(), true));
                     }
                 }
