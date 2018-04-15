@@ -29,6 +29,7 @@ using System.Text;
 using System.Reflection;
 
 using UnityEngine;
+using KSP.UI.Screens;
 using KSPPluginFramework;
 using FingerboxLib;
 
@@ -44,6 +45,9 @@ namespace CrewRandR.Interface
         {
             base.Awake();
             GameEvents.onEditorShipModified.Add(OnEditorShipModified);
+            GameEvents.onEditorPodDeleted.Add(OnEditorPodDeleted);
+            GameEvents.onEditorRestart.Add(OnEditorRestart);
+            GameEvents.onEditorLoad.Add(OnEditorLoad);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
 #if false
@@ -57,6 +61,30 @@ namespace CrewRandR.Interface
         protected void OnEditorShipModified(ShipConstruct ship)
         {
             rootExists = CheckRoot(ship);                       
+        }
+
+        protected void OnEditorPodDeleted()
+        {
+            // Deleting the root part doesn't fire OnEditorShipModified, but
+            // there's no root part anymore.
+            rootExists = false;
+        }
+
+        protected void OnEditorRestart()
+        {
+            // Clicking the editor's "New" button doesn't fire
+            // OnEditorShipModified, but there's no root part anymore.
+            rootExists = false;
+        }
+
+        protected void OnEditorLoad(ShipConstruct ship, CraftBrowserDialog.LoadType loadType)
+        {
+            if (loadType == CraftBrowserDialog.LoadType.Normal)
+            {
+                // Loading a new ship design replaces the root part, and the new
+                // root hasn't been cleaned even if the old one had been.
+                cleanedRoot = false;
+            }
         }
 
         protected void OnEditorScreenChanged(EditorScreen screen)
