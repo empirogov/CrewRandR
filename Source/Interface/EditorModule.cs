@@ -88,21 +88,18 @@ namespace CrewRandR.Interface
         // Our methods
         protected override void Update()
         {
-            if (CrewRandRSettings.Instance != null && CrewRandRSettings.Instance.AssignCrews)
+            try
             {
-                try
+                if (rootNeedsCleaning)
                 {
-                    if (rootNeedsCleaning)
-                    {
-                        CleanManifest();
-                        rootNeedsCleaning = false;
-                    }
+                    CleanManifest();
+                    rootNeedsCleaning = false;
                 }
-                catch (Exception)
-                {
-                    // No worries!
-                    Logging.Debug("If there is a problem with clearing the roster, look here.");
-                }
+            }
+            catch (Exception)
+            {
+                // No worries!
+                Logging.Debug("If there is a problem with clearing the roster, look here.");
             }
         }
     }
