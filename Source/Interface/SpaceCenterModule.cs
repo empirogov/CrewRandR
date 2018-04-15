@@ -70,23 +70,15 @@ namespace CrewRandR.Interface
                 if (updateCnt-- <= 0)
                     updateLabelOnce = false;
 
-                Logging.Debug("AC is spawned...");
-                AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
-                if (ac)
+                Logging.Info("");
+                IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
+                foreach (CrewListItem crewContainer in crewItemContainers)
                 {
-                    foreach (var s in ac.ScrollListAvailable)
+                    if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
                     {
-                        Logging.Info("");
-                        IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
-                        foreach (CrewListItem crewContainer in crewItemContainers)
-                        {
-                            if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
-                            {
-                                Logging.Debug("relabeling: " + crewContainer.GetName());
-                                string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
-                                crewContainer.SetLabel(label);
-                            }
-                        }
+                        Logging.Debug("relabeling: " + crewContainer.GetName());
+                        string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
+                        crewContainer.SetLabel(label);
                     }
                 }
             }
