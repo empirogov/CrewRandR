@@ -138,6 +138,13 @@ namespace CrewRandR
             {
                 kerbal.rosterStatus = CrewRandR.ROSTERSTATUS_VACATION;
             }
+
+            if (CrewAssignmentDialog.Instance == null)
+            {
+                Logging.Info("CrewAssignmentDialog.Instance is null");
+                return;
+            }
+            Logging.Info("CrewAssignmentDialog.Instance.RefreshCrewLists");
             CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
 
