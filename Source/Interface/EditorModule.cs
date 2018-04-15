@@ -39,7 +39,7 @@ namespace CrewRandR.Interface
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     class EditorModule : SceneModule
     {
-        bool rootNeedsCleaning = false;
+        bool manifestNeedsCleaning = false;
 
         // Monobehaviour Methods
         protected override void Awake()
@@ -64,14 +64,14 @@ namespace CrewRandR.Interface
             // session, it may have assigned crew who are now on vacation.
             if (CrewAssignmentDialog.Instance?.GetManifest() != null)
             {
-                rootNeedsCleaning = true;
+                manifestNeedsCleaning = true;
             }
         }
 
         protected void OnEditorPodPicked(Part part)
         {
             // There's now a root part, and it needs to be cleaned.
-            rootNeedsCleaning = true;
+            manifestNeedsCleaning = true;
         }
 
         protected void OnEditorLoad(ShipConstruct ship, CraftBrowserDialog.LoadType loadType)
@@ -80,7 +80,7 @@ namespace CrewRandR.Interface
             {
                 // Loading a new ship design replaces the root part, and the new
                 // root hasn't been cleaned even if the old one had been.
-                rootNeedsCleaning = true;
+                manifestNeedsCleaning = true;
             }
         }
 
@@ -102,10 +102,10 @@ namespace CrewRandR.Interface
         {
             try
             {
-                if (rootNeedsCleaning)
+                if (manifestNeedsCleaning)
                 {
                     CleanManifest();
-                    rootNeedsCleaning = false;
+                    manifestNeedsCleaning = false;
                 }
             }
             catch (Exception)
