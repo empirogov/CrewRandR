@@ -44,7 +44,7 @@ namespace CrewRandR.Interface
         protected override void Awake()
         {
             base.Awake();
-            GameEvents.onEditorShipModified.Add(OnEditorShipModified);
+            GameEvents.onEditorPodPicked.Add(OnEditorPodPicked);
             GameEvents.onEditorPodDeleted.Add(OnEditorPodDeleted);
             GameEvents.onEditorRestart.Add(OnEditorRestart);
             GameEvents.onEditorLoad.Add(OnEditorLoad);
@@ -58,22 +58,22 @@ namespace CrewRandR.Interface
         }
 #endif
         // KSP Events
-        protected void OnEditorShipModified(ShipConstruct ship)
+        protected void OnEditorPodPicked(Part part)
         {
-            rootExists = CheckRoot(ship);                       
+            // There's now a root part, and it needs to be cleaned.
+            rootExists = true;
+            cleanedRoot = false;
         }
 
         protected void OnEditorPodDeleted()
         {
-            // Deleting the root part doesn't fire OnEditorShipModified, but
-            // there's no root part anymore.
+            // There's no root part anymore.
             rootExists = false;
         }
 
         protected void OnEditorRestart()
         {
-            // Clicking the editor's "New" button doesn't fire
-            // OnEditorShipModified, but there's no root part anymore.
+            // There's no root part anymore.
             rootExists = false;
         }
 
@@ -83,6 +83,7 @@ namespace CrewRandR.Interface
             {
                 // Loading a new ship design replaces the root part, and the new
                 // root hasn't been cleaned even if the old one had been.
+                rootExists = true;
                 cleanedRoot = false;
             }
         }
@@ -123,11 +124,6 @@ namespace CrewRandR.Interface
                     Logging.Debug("If there is a problem with clearing the roster, look here.");
                 }
             }
-        }
-
-        protected bool CheckRoot(ShipConstruct ship)
-        {
-            return (ship != null) && (ship.Count > 0);
         }
     }
 }
