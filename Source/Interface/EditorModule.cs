@@ -29,6 +29,7 @@ using System.Text;
 using System.Reflection;
 
 using UnityEngine;
+using KSP.UI;
 using KSP.UI.Screens;
 using KSPPluginFramework;
 using FingerboxLib;
@@ -44,6 +45,7 @@ namespace CrewRandR.Interface
         protected override void Awake()
         {
             base.Awake();
+            GameEvents.onEditorStarted.Add(OnEditorStarted);
             GameEvents.onEditorPodPicked.Add(OnEditorPodPicked);
             GameEvents.onEditorLoad.Add(OnEditorLoad);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
@@ -56,6 +58,16 @@ namespace CrewRandR.Interface
         }
 #endif
         // KSP Events
+        protected void OnEditorStarted()
+        {
+            // If there's a ship design left over from a previous editor
+            // session, it may have assigned crew who are now on vacation.
+            if (CrewAssignmentDialog.Instance?.GetManifest() != null)
+            {
+                rootNeedsCleaning = true;
+            }
+        }
+
         protected void OnEditorPodPicked(Part part)
         {
             // There's now a root part, and it needs to be cleaned.
