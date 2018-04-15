@@ -38,15 +38,13 @@ namespace CrewRandR.Interface
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     class EditorModule : SceneModule
     {
-        bool rootExists, cleanedRoot;
+        bool rootNeedsCleaning = false;
 
         // Monobehaviour Methods
         protected override void Awake()
         {
             base.Awake();
             GameEvents.onEditorPodPicked.Add(OnEditorPodPicked);
-            GameEvents.onEditorPodDeleted.Add(OnEditorPodDeleted);
-            GameEvents.onEditorRestart.Add(OnEditorRestart);
             GameEvents.onEditorLoad.Add(OnEditorLoad);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
@@ -61,20 +59,7 @@ namespace CrewRandR.Interface
         protected void OnEditorPodPicked(Part part)
         {
             // There's now a root part, and it needs to be cleaned.
-            rootExists = true;
-            cleanedRoot = false;
-        }
-
-        protected void OnEditorPodDeleted()
-        {
-            // There's no root part anymore.
-            rootExists = false;
-        }
-
-        protected void OnEditorRestart()
-        {
-            // There's no root part anymore.
-            rootExists = false;
+            rootNeedsCleaning = true;
         }
 
         protected void OnEditorLoad(ShipConstruct ship, CraftBrowserDialog.LoadType loadType)
@@ -83,8 +68,7 @@ namespace CrewRandR.Interface
             {
                 // Loading a new ship design replaces the root part, and the new
                 // root hasn't been cleaned even if the old one had been.
-                rootExists = true;
-                cleanedRoot = false;
+                rootNeedsCleaning = true;
             }
         }
 
@@ -108,14 +92,10 @@ namespace CrewRandR.Interface
             {
                 try
                 {
-                    if (rootExists && !cleanedRoot)
+                    if (rootNeedsCleaning)
                     {
                         CleanManifest();
-                        cleanedRoot = true;
-                    }
-                    else if (!rootExists && cleanedRoot)
-                    {
-                        cleanedRoot = false;
+                        rootNeedsCleaning = false;
                     }
                 }
                 catch (Exception)
