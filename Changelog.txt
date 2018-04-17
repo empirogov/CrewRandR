@@ -1,3 +1,10 @@
+1.1.8
+	Thanks to @Wyzard for the following bug fixes:
+		Fixed kerbals not going on vacation if recovered from the tracking station or space center scenes.
+		Fixed vacationing kerbals sometimes being auto-assigned as crew in the VAB/SPH.
+		Fixed NullReferenceException after clicking on the launchpad or runway at the space center.
+		Reduced some brief logspam when opening the astronaut center.
+
 1.1.7
 	Added support for ClickThroughBlocker
 	Updated to 1.4.1
