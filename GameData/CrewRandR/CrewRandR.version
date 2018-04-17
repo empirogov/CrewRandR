@@ -1,7 +1,7 @@
 {
   "NAME": "CrewRandR",
   "URL": "https://raw.githubusercontent.com/linuxgurugamer/CrewRandR/master/CrewRandR.version",
-    "DOWNLOAD": "https://github.com/linuxgurugamer/CrewRandR/releases",
+  "DOWNLOAD": "https://github.com/linuxgurugamer/CrewRandR/releases",
   "GITHUB": {
     "USERNAME": "linuxgurugamer",
     "REPOSITORY": "CrewRandR"
@@ -9,7 +9,7 @@
   "VERSION": {
     "MAJOR": 1,
     "MINOR": 1,
-    "PATCH": 7,
+    "PATCH": 8,
     "BUILD": 0
   },
   "KSP_VERSION": {
